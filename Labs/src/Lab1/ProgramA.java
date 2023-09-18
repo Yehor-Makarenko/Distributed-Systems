@@ -1,6 +1,7 @@
+package Lab1;
 import javax.swing.*;
 
-public class ProgrammA {
+public class ProgramA {
   public static void main(String[] args) {    
     JFrame f = new JFrame("Lab1");
     JButton startButton = new JButton("Start");    

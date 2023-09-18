@@ -1,6 +1,7 @@
+package Lab1;
 import javax.swing.*;
 
-public class ProgrammB {
+public class ProgramB {
   private static int semaphore = 1;
 
   public static void main(String[] args) {           
