@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "TaskManager",
+      "request": "launch",
+      "mainClass": "Lab2.TaskA.TaskManager",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
       "name": "Current File",
       "request": "launch",
       "mainClass": "${file}"
