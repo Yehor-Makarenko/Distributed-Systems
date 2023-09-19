@@ -3,11 +3,12 @@ package Lab2.TaskA;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class TaskManager {
-  private static int forestSize = 100;
+  private static int forestSize = 1000;
   private static int searchSize = 100;
   private static int lastPosition = 0;
   private static AtomicBoolean isFound = new AtomicBoolean(false);
-  private static boolean[] forest;
+  private static AtomicBoolean canGetTask = new AtomicBoolean(true);
+  private static boolean[] forest;  
 
   public static void init() {          
     forest = new boolean[forestSize * forestSize];  
@@ -15,12 +16,25 @@ public class TaskManager {
   }
 
   public static int[] getTask() {    
-    if ((isFound.get() == true) || (lastPosition >= forestSize * forestSize)) {
+    if (isFound.get()) {
+      return null;    
+    }
+
+    while(true) {
+      if (canGetTask.compareAndSet(true, false)) {     
+        break;        
+      }
+      Thread.yield();
+    }    
+
+    if (lastPosition >= forestSize * forestSize) {
+      canGetTask.set(true);
       return null;
     }
 
     int[] positions = {lastPosition, lastPosition + searchSize};    
     lastPosition += searchSize;
+    canGetTask.set(true);
     return positions;
   }
 
