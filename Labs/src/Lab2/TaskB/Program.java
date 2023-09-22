@@ -1,7 +1,7 @@
 package Lab2.TaskB;
 
 public class Program {
-  private static int stuffNumber = 10;
+  private static int stuffNumber = 1000;
   private static Buffer b1 = new Buffer();
   private static Buffer b2 = new Buffer();
   private static Buffer b3 = new Buffer();
@@ -58,7 +58,6 @@ public class Program {
           return; 
         }
         price += item.getPrice(); 
-        System.out.println(price);
       }      
     }
   }

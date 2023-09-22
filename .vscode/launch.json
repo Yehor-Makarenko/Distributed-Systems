@@ -6,6 +6,20 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Program",
+      "request": "launch",
+      "mainClass": "Lab2.TaskB.Program",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
+      "name": "Program",
+      "request": "launch",
+      "mainClass": "Lab2.TaskA.Program",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
       "name": "TaskManager",
       "request": "launch",
       "mainClass": "Lab2.TaskA.TaskManager",
