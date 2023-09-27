@@ -9,6 +9,6 @@ public class Bear implements Runnable {
     }
 
     HoneyPot.eatHoney();
-    System.out.println("Bear had eaten all honey");
+    System.out.println("Bear has eaten all honey");
   }
 }
