@@ -1,6 +1,6 @@
 package Lab2.TaskA;
 
-class ForestThread implements Runnable {
+class BeeThread implements Runnable {
   public void run() {
     while (true) {            
       int[] positions = TaskManager.getTask();

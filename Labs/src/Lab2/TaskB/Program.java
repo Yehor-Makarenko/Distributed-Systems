@@ -36,7 +36,7 @@ public class Program {
 
   private static class EnsignB implements Runnable {
     public void run() {
-            while (true) {
+      while (true) {
         Stuff item = b2.get();
         if (item == null) {
           b3.setEnd();

@@ -7,7 +7,7 @@ public class Program {
   public static void main(String[] args) {
     TaskManager.init();
     for (int i = 0; i < threadsNumber; i++) {
-      bees[i] = new Thread(new ForestThread());
+      bees[i] = new Thread(new BeeThread());
     }    
     for (int i = 0; i < threadsNumber; i++) {
       bees[i].start();

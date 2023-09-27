@@ -27,7 +27,6 @@ func main() {
 		monks = append(monks, Monk{r.Intn(200) + 100, Monastery(r.Intn(2))})
 	}
 
-	t := time.Now()
 	ch := make(chan int)
 	go getWinnerFromArray(monks, 0, size-1, ch)
 	winner := monks[<-ch]
@@ -37,7 +36,6 @@ func main() {
 	} else {
 		fmt.Println("Winner from Guan-Yan monastery and his qi is", winner.qi)
 	}
-	fmt.Println("Time is", time.Now().Sub(t))
 }
 
 func getWinnerFromArray(monks []Monk, start, end int, ch chan int) {
