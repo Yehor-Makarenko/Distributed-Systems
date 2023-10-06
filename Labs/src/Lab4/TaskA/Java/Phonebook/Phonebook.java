@@ -1,107 +1,33 @@
-// package Lab4.TaskA.Java.Phonebook;
-
-// import java.io.File;
-// import java.io.FileInputStream;
-// import java.io.FileOutputStream;
-// import java.io.FileWriter;
-// import java.io.IOException;
-// import java.io.InputStream;
-// import java.net.URISyntaxException;
-// import java.util.Properties;
-
-// public class Phonebook {
-//   private static Properties props = new Properties();
-//   private static File db = new File("Labs/src/Lab4/TaskA/resources/database.properties");    
-//   private static InputStream is;
-//   private static FileWriter fos;
-
-//   static public String getPhoneByName(String name) {
-//     String nameWithoutSpaces = name.replaceAll(" ", "_");
-//     String phone;
-
-//     try {
-//       is = Thread.currentThread().getClass().getResourceAsStream("/Lab4/TaskA/resources/database.properties");
-//       props.load(is);
-//       is.close();
-//     } catch (IOException e) {      
-//       e.printStackTrace();
-//     }
-
-//     phone = props.getProperty(nameWithoutSpaces);
-//     return phone;        
-//   }
-
-//   static public String getNameByPhone(String phone) {    
-//     String name;
-
-//     try {
-//       is = Thread.currentThread().getClass().getResourceAsStream("/Lab4/TaskA/resources/database.properties");
-//       props.load(is);
-//       is.close();
-//     } catch (IOException e) {      
-//       e.printStackTrace();
-//     }
-
-//     name = props.getProperty(phone);
-//     return name;        
-//   }
-
-//   static public void addPerson(String name, String phone) {
-//     String nameWithoutSpaces = name.replaceAll(" ", "_");    
-
-//     try {
-//       is = Thread.currentThread().getClass().getResourceAsStream("/Lab4/TaskA/resources/database.properties");      
-//       fos = new FileWriter(db);      
-//       props.load(is);
-//       props.setProperty(nameWithoutSpaces, phone);
-//       props.setProperty(phone, nameWithoutSpaces);
-//       props.store(fos, "");
-//       is.close();
-//       fos.close();
-//     } catch (IOException e) {
-//       e.printStackTrace();
-//     }
-//   }
-
-//   static public void removePersonByName(String name) {
-//     String nameWithoutSpaces = name.replaceAll(" ", "_");
-//     try {
-//       is = Thread.currentThread().getClass().getResourceAsStream("/Lab4/TaskA/resources/database.properties");
-//       fos = new FileWriter(db);
-//       props.load(is);
-//       props.remove(nameWithoutSpaces);      
-//       props.store(fos, null);
-//       is.close();
-//       fos.close();
-//     } catch (IOException e) {
-//       e.printStackTrace();
-//     }
-//   }
-// }
-
 package Lab4.TaskA.Java.Phonebook;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.Enumeration;
 import java.util.Properties;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class Phonebook {
-  private static Properties props = new Properties();
-  private static File db = new File("Labs/src/Lab4/TaskA/resources/database.properties");    
-  private static InputStream is;
+public class Phonebook {  
+  private static File dbNames = new File("Labs/src/Lab4/TaskA/resources/dbNames.properties");    
+  private static File dbPhones = new File("Labs/src/Lab4/TaskA/resources/dbPhones.properties");    
+  private static FileInputStream fis;
   private static FileOutputStream fos;
+  private static ReadWriteLock rwLock = new ReentrantReadWriteLock();
+  private static Lock readLock = rwLock.readLock();
+  private static Lock writeLock = rwLock.writeLock();
 
   static public String getPhoneByName(String name) {
+    Properties props = new Properties();
     String nameWithoutSpaces = name.replaceAll(" ", "_");
     String phone;
 
     try {
-      is = Thread.currentThread().getClass().getResourceAsStream("/Lab4/TaskA/resources/database.properties");
-      props.load(is);
-      is.close();
+      fis = new FileInputStream(dbNames);
+      props.load(fis);
+      fis.close();
     } catch (IOException e) {      
       e.printStackTrace();
     }
@@ -111,12 +37,13 @@ public class Phonebook {
   }
 
   static public String getNameByPhone(String phone) {    
+    Properties props = new Properties();
     String name;
 
     try {
-      is = Thread.currentThread().getClass().getResourceAsStream("/Lab4/TaskA/resources/database.properties");
-      props.load(is);
-      is.close();
+      fis = new FileInputStream(dbPhones);
+      props.load(fis);
+      fis.close();
     } catch (IOException e) {      
       e.printStackTrace();
     }
@@ -126,35 +53,97 @@ public class Phonebook {
   }
 
   static public void addPerson(String name, String phone) {
+    Properties props = new Properties();
     String nameWithoutSpaces = name.replaceAll(" ", "_");    
 
     try {
-      is = new FileInputStream(db);
-      fos = new FileOutputStream(db);      
-      props.load(is);
-      // props.clear();
-      props.setProperty(nameWithoutSpaces, phone);
-      props.setProperty(phone, nameWithoutSpaces);
+      fis = new FileInputStream(dbNames);
+      props.load(fis);
+      fis.close();
+      props.setProperty(nameWithoutSpaces, phone);      
+      fos = new FileOutputStream(dbNames);            
       props.store(fos, "");
-      is.close();
-      fos.close();
+      fos.close();     
+      props.clear();  
+      fis = new FileInputStream(dbPhones);
+      props.load(fis);
+      fis.close();    
+      props.setProperty(phone, nameWithoutSpaces);
+      fos = new FileOutputStream(dbPhones);            
+      props.store(fos, "");
+      fos.close();      
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
   static public void removePersonByName(String name) {
+    Properties props = new Properties();
     String nameWithoutSpaces = name.replaceAll(" ", "_");
     try {
-      is = Thread.currentThread().getClass().getResourceAsStream("/Lab4/TaskA/resources/database.properties");
-      fos = new FileOutputStream(db);
-      props.load(is);
+      fis = new FileInputStream(dbNames);
+      props.load(fis);
+      fis.close();
       props.remove(nameWithoutSpaces);      
-      props.store(fos, null);
-      is.close();
-      fos.close();
+      fos = new FileOutputStream(dbNames);            
+      props.store(fos, "");
+      fos.close();      
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  static public String getRandName() {
+    Properties props = new Properties();
+    String name = "";
+
+    try {
+      fis = new FileInputStream(dbNames);
+      props.load(fis);
+      fis.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    Enumeration<Object> names = props.keys();  
+    for (int i = 0; i < (int)(props.size() * Math.random()); i++) {
+      names.nextElement();
+    }
+    name = names.nextElement().toString().replaceAll("_", " ");
+    return name;
+  }
+
+  static public String getRandPhone() {
+    Properties props = new Properties();
+    String phone = "";
+
+    try {
+      fis = new FileInputStream(dbPhones);
+      props.load(fis);
+      fis.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    Enumeration<Object> phones = props.keys();  
+    for (int i = 0; i < (int)(props.size() * Math.random()); i++) {
+      phones.nextElement();
+    }
+    phone = phones.nextElement().toString();
+    return phone;
+  }
+
+  static public boolean hasName(String name) {
+    Properties props = new Properties();    
+
+    try {
+      fis = new FileInputStream(dbNames);
+      props.load(fis);
+      fis.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    return props.containsKey(name);
   }
 }
