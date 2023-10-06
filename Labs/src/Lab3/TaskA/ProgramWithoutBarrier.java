@@ -12,7 +12,7 @@ public class ProgramWithoutBarrier {
     }
 
     for (int i = 0; i < BEES_NUMBER; i++) {
-      bees[i] .start();
+      bees[i].start();
     }
   }
 

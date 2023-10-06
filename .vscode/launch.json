@@ -6,6 +6,34 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "Lab4.TaskA.Java.Main",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
+      "name": "Program",
+      "request": "launch",
+      "mainClass": "Lab3.TaskC.Program",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
+      "name": "ProgramWithBarrier",
+      "request": "launch",
+      "mainClass": "Lab3.TaskA.ProgramWithBarrier",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
+      "name": "ProgramWithoutBarrier",
+      "request": "launch",
+      "mainClass": "Lab3.TaskA.ProgramWithoutBarrier",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
       "name": "Program",
       "request": "launch",
       "mainClass": "Lab2.TaskB.Program",
