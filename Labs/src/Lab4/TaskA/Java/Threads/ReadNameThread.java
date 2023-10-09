@@ -4,16 +4,9 @@ import Lab4.TaskA.Java.Phonebook.Phonebook;
 
 public class ReadNameThread implements Runnable {
   public void run() {
-    while (true) {
+    while (true) {      
       String phone = Phonebook.getRandPhone();
-
-      try {
-        Thread.sleep(1000);
-      } catch (InterruptedException e) {      
-        e.printStackTrace();
-      }
-
-      String name = Phonebook.getNameByPhone(phone);
+      String name = Phonebook.getNameByPhone(phone);      
 
       if (name == null) {
         System.out.println("Person with phone " + phone + " is not found");
@@ -21,6 +14,11 @@ public class ReadNameThread implements Runnable {
       }
 
       System.out.println("Found: " + name);
+      try {
+        Thread.sleep(5000);
+      } catch (InterruptedException e) {      
+        e.printStackTrace();
+      }
     }
   }
 }

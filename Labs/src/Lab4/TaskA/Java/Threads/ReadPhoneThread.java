@@ -6,13 +6,6 @@ public class ReadPhoneThread implements Runnable {
   public void run() {
     while (true) {
       String name = Phonebook.getRandName();
-
-      try {
-        Thread.sleep(1000);
-      } catch (InterruptedException e) {      
-        e.printStackTrace();
-      }
-
       String phone = Phonebook.getPhoneByName(name);
 
       if (phone == null) {
@@ -20,6 +13,12 @@ public class ReadPhoneThread implements Runnable {
         continue;
       }
       System.out.println("Found: " + phone);
+
+      try {
+        Thread.sleep(5000);
+      } catch (InterruptedException e) {      
+        e.printStackTrace();
+      }
     }    
   }
 }

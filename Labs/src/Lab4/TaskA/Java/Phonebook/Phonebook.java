@@ -19,9 +19,9 @@ public class Phonebook {
   private static ReadWriteLock rwLock = new ReentrantReadWriteLock();
   private static Lock readLock = rwLock.readLock();
   private static Lock writeLock = rwLock.writeLock();  
-  private static Condition noPeopleCondition = new ReentrantLock().newCondition();
-
-  public static HashMap<String, String> removedPeople = new HashMap<>();
+  private static Lock noPeopleLock = new ReentrantLock();
+  private static Condition noPeopleCondition = noPeopleLock.newCondition();
+  private static HashMap<String, String> removedPeople = new HashMap<>();
 
   static public String getPhoneByName(String name) {
     readLock.lock();
@@ -72,8 +72,10 @@ public class Phonebook {
       e.printStackTrace();
     }
 
-    noPeopleCondition.signalAll();
     removedPeople.remove(name);
+    noPeopleLock.lock();
+    noPeopleCondition.signalAll();
+    noPeopleLock.unlock();
   }
 
   static private void removePerson(String name, String phone) {
@@ -108,7 +110,9 @@ public class Phonebook {
 
     if (props.keySet().size() == 0) {
       try {
+        noPeopleLock.lock();
         noPeopleCondition.await();
+        noPeopleLock.unlock();
       } catch (InterruptedException e) {        
         e.printStackTrace();
       }
@@ -142,7 +146,9 @@ public class Phonebook {
 
     if (props.keySet().size() == 0) {
       try {
+        noPeopleLock.lock();
         noPeopleCondition.await();
+        noPeopleLock.unlock();
       } catch (InterruptedException e) {        
         e.printStackTrace();
       }
@@ -165,6 +171,11 @@ public class Phonebook {
 
   public static void removeRandPerson() {
     writeLock.lock();
+    if (!hasPeople()) {
+      writeLock.unlock();
+      return;
+    }
+
     String name = getRandName();
     String phone = getPhoneByName(name);
 
@@ -175,11 +186,28 @@ public class Phonebook {
 
   public static void addRandPerson() {
     writeLock.lock();
+    if (removedPeople.size() == 0) {
+      writeLock.unlock();
+      return;
+    }
+
     String name = Phonebook.removedPeople.keySet().toArray()[0].toString();
     String phone = Phonebook.removedPeople.get(name);
 
     addPerson(name, phone);
     System.out.println("Added: " + name + " " + phone);
     writeLock.unlock();
+  }
+
+  private static boolean hasPeople() {
+    Properties props = new Properties();
+
+    try {
+      props.load(new FileInputStream(dbNames));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return !props.isEmpty();
   }
 }
