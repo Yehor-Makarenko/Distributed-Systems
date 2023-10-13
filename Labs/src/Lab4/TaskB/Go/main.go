@@ -20,7 +20,7 @@ const (
 )
 
 type Garden struct {
-	mu                  sync.Mutex
+	mu                  sync.RWMutex
 	width, height       int
 	field               []PlantState
 	wiltedPlantsIndexes []int
@@ -79,7 +79,7 @@ func (garden *Garden) wiltPlants() {
 
 func (garden *Garden) copyToFile() {
 	for {
-		garden.mu.Lock()
+		garden.mu.RLock()
 		gardenStr := ""
 
 		for i := 0; i < garden.height; i++ {
@@ -100,7 +100,7 @@ func (garden *Garden) copyToFile() {
 			log.Fatal(err)
 		}
 
-		garden.mu.Unlock()
+		garden.mu.RUnlock()
 
 		time.Sleep(3 * time.Second)
 	}
@@ -108,9 +108,9 @@ func (garden *Garden) copyToFile() {
 
 func (garden *Garden) print() {
 	for {
-		garden.mu.Lock()
+		garden.mu.RLock()
 		content, err := os.ReadFile(GARDEN_PATH)
-		garden.mu.Unlock()
+		garden.mu.RUnlock()
 
 		if err != nil {
 			log.Fatal(err)
