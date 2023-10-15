@@ -1,10 +1,10 @@
-package Lab5.Java.TaskA;
+package Lab5.TaskA.Java;
 
 import java.util.concurrent.CyclicBarrier;
 
-import Lab5.Java.TaskA.Squad.Squad;
-import Lab5.Java.TaskA.Threads.ChangeStateThread;
-import Lab5.Java.TaskA.Threads.ConfirmStateChangesThread;
+import Lab5.TaskA.Java.Squad.Squad;
+import Lab5.TaskA.Java.Threads.ChangeStateThread;
+import Lab5.TaskA.Java.Threads.ConfirmStateChangesThread;
 
 public class Main {
   private static int recruitsPerThread = 5000;

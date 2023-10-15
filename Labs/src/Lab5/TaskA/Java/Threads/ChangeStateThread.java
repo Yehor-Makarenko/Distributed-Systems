@@ -1,9 +1,9 @@
-package Lab5.Java.TaskA.Threads;
+package Lab5.TaskA.Java.Threads;
 
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
-import Lab5.Java.TaskA.Squad.Squad;
+import Lab5.TaskA.Java.Squad.Squad;
 
 public class ChangeStateThread implements Runnable {
   private int firstIndex;

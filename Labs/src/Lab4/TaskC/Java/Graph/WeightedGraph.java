@@ -7,58 +7,155 @@ import java.util.Queue;
 
 public class WeightedGraph {  
   private static HashMap<String, HashMap<String, Integer>> adjacencyList = new HashMap<>();
+  private static int readLock = 0;
+  private static int writeLock = 0;
 
-  public static synchronized void addVertex(String v) {
-    adjacencyList.put(v, new HashMap<>());
+  public static void addVertex(String v) {
+    while (true) {
+      synchronized(adjacencyList) {
+        if (readLock == 0 && writeLock == 0) {
+          adjacencyList.put(v, new HashMap<>());
+          return;
+        }
+      }
+      Thread.yield();
+    }
   }
 
-  public static synchronized void addEdge(String v1, String v2, int weight) {
+  public static void addEdge(String v1, String v2, int weight) {
+    while (true) {
+      synchronized(adjacencyList) {
+        if (readLock == 0 && writeLock == 0) {
+          writeLock++;
+          break;
+        }
+      }
+      Thread.yield();
+    }
+
     if (!adjacencyList.containsKey(v1) || !adjacencyList.containsKey(v2)) {
-      return;
+      synchronized(adjacencyList) {
+        writeLock--;
+        return;
+      }       
     }
 
     adjacencyList.get(v1).put(v2, weight);
     adjacencyList.get(v2).put(v1, weight);
+
+    synchronized(adjacencyList) {
+      writeLock--;
+    }
   }
 
-  public static synchronized void changeEdgeWeight(String v1, String v2, int newWeight) {
+  public static void changeEdgeWeight(String v1, String v2, int newWeight) {
+    while (true) {
+      synchronized(adjacencyList) {
+        if (readLock == 0 && writeLock == 0) {
+          writeLock++;
+          break;
+        }
+      }
+      Thread.yield();
+    }
+
     if (!adjacencyList.containsKey(v1) || !adjacencyList.get(v1).containsKey(v2)) {
-      return;
+      synchronized(adjacencyList) {
+        writeLock--;
+        return;
+      } 
     }
 
     adjacencyList.get(v1).put(v2, newWeight);
     adjacencyList.get(v2).put(v1, newWeight);
+
+    synchronized(adjacencyList) {
+      writeLock--;
+    }
   } 
 
-  public static synchronized void removeVertex(String v) {
+  public static void removeVertex(String v) {
+    while (true) {
+      synchronized(adjacencyList) {
+        if (readLock == 0 && writeLock == 0) {
+          writeLock++;
+          break;
+        }
+      }
+      Thread.yield();
+    }
+
     if (!adjacencyList.containsKey(v)) {
-      return;
+      synchronized(adjacencyList) {
+        writeLock--;
+        return;
+      } 
     }
 
     for (String neighbour: adjacencyList.get(v).keySet()) {
       adjacencyList.get(neighbour).remove(v);
     }
     adjacencyList.remove(v);
+
+    synchronized(adjacencyList) {
+      writeLock--;
+    }
   }
 
-  public static synchronized void removeEdge(String v1, String v2) {
+  public static void removeEdge(String v1, String v2) {
+    while (true) {
+      synchronized(adjacencyList) {
+        if (readLock == 0 && writeLock == 0) {
+          writeLock++;
+          break;
+        }
+      }
+      Thread.yield();
+    }
+
     if (!adjacencyList.containsKey(v1) || !adjacencyList.containsKey(v2)) {
-      return;
+      synchronized(adjacencyList) {
+        writeLock--;
+        return;
+      } 
     }
 
     adjacencyList.get(v1).remove(v2);
     adjacencyList.get(v2).remove(v1);
+
+    synchronized(adjacencyList) {
+      writeLock--;
+    }
   }
 
-  public static synchronized Integer getPathWeight(String v1, String v2) {
+  public static Integer getPathWeight(String v1, String v2) {
+    while (true) {
+      synchronized(adjacencyList) {
+        if (writeLock == 0) {
+          readLock++;
+          break;
+        }
+      }
+      Thread.yield();
+    }
+
     if (!adjacencyList.containsKey(v1) || !adjacencyList.containsKey(v2)) {
-      return null;
+      synchronized(adjacencyList) {
+        readLock--;
+        return null;
+      } 
     }
     if (v1 == v2) {
-      return 0;
+      synchronized(adjacencyList) {
+        readLock--;
+        return 0;
+      }       
     }
     if (adjacencyList.get(v1).containsKey(v2)) {
-      return adjacencyList.get(v1).get(v2);
+      synchronized(adjacencyList) {
+        readLock--;
+        return adjacencyList.get(v1).get(v2);
+      }             
     }
 
     HashMap<String, Integer> weigths = new HashMap<>();
@@ -70,7 +167,10 @@ public class WeightedGraph {
       String vertex = queue.remove();
       for (String neighbour: adjacencyList.get(vertex).keySet()) {
           if (neighbour == v2) {
-            return weigths.get(vertex) + adjacencyList.get(vertex).get(neighbour);
+            synchronized(adjacencyList) {
+              readLock--;
+              return weigths.get(vertex) + adjacencyList.get(vertex).get(neighbour);
+            }            
           }
           if (!weigths.containsKey(neighbour)) {
             weigths.put(neighbour, weigths.get(vertex) + adjacencyList.get(vertex).get(neighbour));
@@ -79,48 +179,121 @@ public class WeightedGraph {
       }
     }
 
-    return null;
+    synchronized(adjacencyList) {
+      readLock--;
+      return null;
+    }  
   }  
 
-  public static synchronized void print() {
+  public static void print() {
+    while (true) {
+      synchronized(adjacencyList) {
+        if (writeLock == 0) {
+          readLock++;
+          break;
+        }
+      }
+      Thread.yield();
+    }
+
     for (String vertex: adjacencyList.keySet()) {
       System.out.println(vertex + ": ");
       for (String neighbour: adjacencyList.get(vertex).keySet()) {
         System.out.println("\t" + neighbour + ": " + adjacencyList.get(vertex).get(neighbour));
       }
     }
+
+    synchronized(adjacencyList) {
+      readLock--;
+    }
   }
 
-  public static synchronized String getRandVertex() {
-    return new ArrayList<>(adjacencyList.keySet()).get((int)(Math.random() * adjacencyList.size()));
+  public static String getRandVertex() {
+    while (true) {
+      synchronized(adjacencyList) {
+        if (writeLock == 0) {          
+          return new ArrayList<>(adjacencyList.keySet()).get((int)(Math.random() * adjacencyList.size()));
+        }
+      }
+      Thread.yield();
+    }    
   }
 
-  public static synchronized String[] getRandEdge() {    
+  public static String[] getRandEdge() {   
+    while (true) {
+      synchronized(adjacencyList) {
+        if (writeLock == 0) {
+          readLock++;
+          break;
+        }
+      }
+      Thread.yield();
+    }
+
     String randVertex = new ArrayList<>(adjacencyList.keySet()).get((int)(Math.random() * adjacencyList.size()));
     while (adjacencyList.get(randVertex).isEmpty()) {
       randVertex = new ArrayList<>(adjacencyList.keySet()).get((int)(Math.random() * adjacencyList.size()));
     }
     String randNeighbour = new ArrayList<>(adjacencyList.get(randVertex).keySet()).get((int)(Math.random() * adjacencyList.get(randVertex).size()));
-    return new String[]{randVertex, randNeighbour};
+
+    synchronized(adjacencyList) {
+      readLock--;
+      return new String[]{randVertex, randNeighbour};
+    }  
   }
 
-  public static synchronized boolean hasVertex(String v) {
-    return adjacencyList.containsKey(v);
+  public static boolean hasVertex(String v) {
+    while (true) {
+      synchronized(adjacencyList) {
+        if (writeLock == 0) {
+          return adjacencyList.containsKey(v);
+        }
+      }
+      Thread.yield();
+    }    
   }
 
-  public static synchronized boolean hasEdge(String v1, String v2) {
-    return adjacencyList.containsKey(v1) && adjacencyList.get(v1).containsKey(v2);
+  public static boolean hasEdge(String v1, String v2) {
+    while (true) {
+      synchronized(adjacencyList) {
+        if (writeLock == 0) {
+          return adjacencyList.containsKey(v1) && adjacencyList.get(v1).containsKey(v2);
+        }
+      }
+      Thread.yield();
+    }    
   }
 
-  public static synchronized int getCitiesNumber() {
-    return adjacencyList.size();
+  public static int getCitiesNumber() {
+    while (true) {
+      synchronized(adjacencyList) {
+        if (writeLock == 0) {
+          return adjacencyList.size();
+        }
+      }
+      Thread.yield();
+    }    
   }
 
-  public static synchronized int getJourneysNumber() {
+  public static int getJourneysNumber() {
+    while (true) {
+      synchronized(adjacencyList) {
+        if (writeLock == 0) {
+          readLock++;
+          break;
+        }
+      }
+      Thread.yield();
+    }
+
     int journeysNumber = 0;
     for (String vertex: adjacencyList.keySet()) {
       journeysNumber += adjacencyList.get(vertex).size();
     }
-    return journeysNumber;
+
+    synchronized(adjacencyList) {
+      readLock--;
+      return journeysNumber;
+    }        
   }
 }

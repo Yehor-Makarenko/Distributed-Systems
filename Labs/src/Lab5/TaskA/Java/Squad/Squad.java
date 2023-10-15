@@ -1,4 +1,4 @@
-package Lab5.Java.TaskA.Squad;
+package Lab5.TaskA.Java.Squad;
 
 public class Squad {
   private static int size = 50000;

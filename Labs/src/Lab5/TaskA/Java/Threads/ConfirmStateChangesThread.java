@@ -1,6 +1,6 @@
-package Lab5.Java.TaskA.Threads;
+package Lab5.TaskA.Java.Threads;
 
-import Lab5.Java.TaskA.Squad.Squad;
+import Lab5.TaskA.Java.Squad.Squad;
 
 public class ConfirmStateChangesThread implements Runnable {
     @Override

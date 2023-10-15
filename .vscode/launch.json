@@ -8,6 +8,13 @@
       "type": "java",
       "name": "Main",
       "request": "launch",
+      "mainClass": "Lab5.TaskC.Java.Main",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
       "mainClass": "Lab4.TaskA.Java.Main",
       "projectName": "Distributed Systems_c04d6a44"
     },
