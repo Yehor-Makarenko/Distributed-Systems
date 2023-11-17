@@ -17,7 +17,7 @@ public class ThreadsController {
       for (int j = 0; j < arraysLength; j++) {
         arr[j] = rand.nextInt(1000);
       }
-      new Thread(new CheckArraySumThread(arr)).start();
+      new Thread(new ChangeArraySumThread(arr)).start();
     }
   }
 

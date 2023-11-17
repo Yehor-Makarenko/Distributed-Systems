@@ -1,7 +1,7 @@
 package Lab5.TaskA.Java.Squad;
 
 public class Squad {
-  private static int size = 50000;
+  private static int size = 200;
   private static boolean[] recruits = new boolean[size];
   private static boolean[] recruitsChanges = new boolean[size];
   private static boolean isStableState = false;
@@ -23,7 +23,7 @@ public class Squad {
     return recruits[index];
   }
 
-  public static void setRecuitState(int index, boolean state) {
+  public static synchronized void setRecuitState(int index, boolean state) {
     recruitsChanges[index] = state;
   }
 
@@ -45,7 +45,7 @@ public class Squad {
     return hasChanges;
   }
 
-  public static void setHasChanges(boolean hasChanges) {
+  public static synchronized void setHasChanges(boolean hasChanges) {
     Squad.hasChanges = hasChanges;
   }
 

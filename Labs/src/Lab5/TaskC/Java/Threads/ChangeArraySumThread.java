@@ -2,11 +2,11 @@ package Lab5.TaskC.Java.Threads;
 
 import java.util.Random;
 
-public class CheckArraySumThread implements Runnable {
+public class ChangeArraySumThread implements Runnable {
   private int[] arr;
   private int sum;
 
-  public CheckArraySumThread(int[] arr) {
+  public ChangeArraySumThread(int[] arr) {
     this.arr = arr;
     for (int i = 0; i < arr.length; i++) {
       sum += arr[i];

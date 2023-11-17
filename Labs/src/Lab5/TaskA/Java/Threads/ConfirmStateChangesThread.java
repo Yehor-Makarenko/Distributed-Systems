@@ -7,7 +7,7 @@ public class ConfirmStateChangesThread implements Runnable {
     public void run() {
       if (Squad.getHasChanges()) {
         Squad.confirmChanges();
-        // Squad.print();
+        Squad.print();
         Squad.setHasChanges(false);
       } else {
         Squad.setIsStableState(true);
