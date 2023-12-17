@@ -126,7 +126,7 @@ public class FootballTeamsControllerXML {
     doc.appendChild(doc.createElement("root"));
     
     for (Team team: teams) {
-      Element teamNode = doc.createElement("team");
+      Element teamNode = doc.createElement("team");      
       teamNode.setAttribute("id", String.valueOf(team.id));
       teamNode.setAttribute("name", team.name);
 

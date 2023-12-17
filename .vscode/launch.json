@@ -6,6 +6,97 @@
   "configurations": [
     {
       "type": "java",
+      "name": "MainXML",
+      "request": "launch",
+      "mainClass": "Lab7.Java.xml.MainXML",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
+      "name": "Test",
+      "request": "launch",
+      "mainClass": "Lab8.Java.Part3.Test",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
+      "name": "Server",
+      "request": "launch",
+      "mainClass": "Server",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
+      "name": "Client",
+      "request": "launch",
+      "mainClass": "Lab8.Java.Part3.Client",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
+      "name": "Server",
+      "request": "launch",
+      "mainClass": "Lab8.Java.Part3.Server",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "Main",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
+      "name": "Client",
+      "request": "launch",
+      "mainClass": "Lab8.Java.Part1.Client",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
+      "name": "Server",
+      "request": "launch",
+      "mainClass": "Lab8.Java.Part1.Server",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
+      "name": "Client",
+      "request": "launch",
+      "mainClass": "Lab8.Java.Part2.Client",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
+      "name": "Server",
+      "request": "launch",
+      "mainClass": "Lab8.Java.Part2.Server",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
+      "name": "MainDB",
+      "request": "launch",
+      "mainClass": "Lab7.Java.db.MainDB",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
+      "name": "Client",
+      "request": "launch",
+      "mainClass": "Lab8.Java.Client",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
+      "name": "Server",
+      "request": "launch",
+      "mainClass": "Lab8.Java.Server",
+      "projectName": "Distributed Systems_c04d6a44"
+    },
+    {
+      "type": "java",
       "name": "Main",
       "request": "launch",
       "mainClass": "Lab7.Java.Main",

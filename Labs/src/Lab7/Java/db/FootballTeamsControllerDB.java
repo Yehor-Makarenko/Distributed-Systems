@@ -64,7 +64,7 @@ public class FootballTeamsControllerDB {
 
   public ArrayList<Player> getPlayersByTeamId(int id) {
     Team team = getTeam(id);
-    String sql = "SELECT * FROM players INNER JOIN teams ON players.team_id = teams.id";
+    String sql = "SELECT * FROM players WHERE players.team_id = " + id;
     ArrayList<Player> players = new ArrayList<>();
     try {
       ResultSet rs = stmt.executeQuery(sql);      
@@ -151,7 +151,7 @@ public class FootballTeamsControllerDB {
     }
   }
 
-  public void print() {
+  public void printAll() {
     String sql = "SELECT * FROM teams";
     ResultSet rs;
     ArrayList<Team> teams = new ArrayList<>();
@@ -173,6 +173,92 @@ public class FootballTeamsControllerDB {
     } catch (SQLException e) {      
       e.printStackTrace();
     }
+  }
+
+  public String getPrintAllString() {
+    String sql = "SELECT * FROM teams";
+    ResultSet rs;
+    ArrayList<Team> teams = new ArrayList<>();
+    String result = "";
+    try {
+      rs = stmt.executeQuery(sql);
+
+      while (rs.next()) {
+        teams.add(new Team(rs.getInt("id"), rs.getString("name")));
+      }
+
+      for (Team team: teams) {
+        result += "Team id: " + team.id + ", name: " + team.name + "\n";            
+        ArrayList<Player> players = getPlayersByTeamId(team.id);
+        for (Player player: players) {
+          result += "\tPlayer id: " + player.id + ", name: " + player.name + ", position: " + player.position + ", number: " + player.number 
+            + ", team name: " + player.team.name + "\n";
+        }
+      }    
+    } catch (SQLException e) {      
+      e.printStackTrace();
+    }
+
+    return result;
+  }
+
+  public void printTeams() {
+    String sql = "SELECT * FROM teams";
+    ResultSet rs;
+    ArrayList<Team> teams = new ArrayList<>();
+    try {
+      rs = stmt.executeQuery(sql);
+
+      while (rs.next()) {
+        teams.add(new Team(rs.getInt("id"), rs.getString("name")));
+      }
+
+      for (Team team: teams) {
+        System.out.println("Team id: " + team.id + ", name: " + team.name);                  
+      }    
+    } catch (SQLException e) {      
+      e.printStackTrace();
+    }
+  }
+
+  public String getPrintTeamsString() {
+    String sql = "SELECT * FROM teams";
+    ResultSet rs;
+    ArrayList<Team> teams = new ArrayList<>();
+    String result = "";
+    try {
+      rs = stmt.executeQuery(sql);
+
+      while (rs.next()) {
+        teams.add(new Team(rs.getInt("id"), rs.getString("name")));
+      }
+
+      for (Team team: teams) {
+        result += "Team id: " + team.id + ", name: " + team.name + "\n";                  
+      }    
+    } catch (SQLException e) {      
+      e.printStackTrace();
+    }
+
+    return result;
+  }
+
+  public void printPlayersByTeamId(int teamId) {
+    ArrayList<Player> players = getPlayersByTeamId(teamId);
+    for (Player player: players) {
+      System.out.println("Player id: " + player.id + ", name: " + player.name + ", position: " + player.position + ", number: " + player.number 
+        + ", team name: " + player.team.name);
+    }
+  }
+
+  public String getPrintPlayersByTeamIdString(int teamId) {
+    ArrayList<Player> players = getPlayersByTeamId(teamId);
+    String result = "";
+    for (Player player: players) {
+      result += "Player id: " + player.id + ", name: " + player.name + ", position: " + player.position + ", number: " + player.number 
+        + ", team name: " + player.team.name + "\n";
+    }
+    return result;
   }
 }
 

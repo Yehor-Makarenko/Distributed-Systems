@@ -6,7 +6,11 @@ public class MainXML {
 
   public static void main(String[] args) {
     FootballTeamsControllerXML tc = new FootballTeamsControllerXML(footballSchemaFileName);
-    tc.loadFromFile(footballFileName);       
+    tc.loadFromFile(footballFileName);  
+    tc.print();
+    tc.addTeam(10, "Dynamo");     
+    tc.print();
+    tc.deleteTeam(10);     
     tc.print();
     tc.saveToFile(footballFileName);
   }
