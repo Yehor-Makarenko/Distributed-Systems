@@ -10,7 +10,7 @@ import Lab8.Java.Part2.RMI.RMIServer;
 public class Client {
   public static void main(String[] args) {    
     try {
-      RMIServer server = (RMIServer) Naming.lookup("//127.0.0.1/SayHello");
+      RMIServer server = (RMIServer) Naming.lookup("//127.0.0.1/Football");
       System.out.println(server.getPrintAllString());
       System.out.println(server.getPrintTeamsString());
       System.out.println(server.getPrintPlayersByTeamIdString(0));

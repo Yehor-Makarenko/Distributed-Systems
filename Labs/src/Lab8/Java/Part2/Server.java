@@ -11,7 +11,7 @@ public class Server {
     try {
       Registry registry = LocateRegistry.createRegistry(1099);
       RMIServerImpl server = new RMIServerImpl();
-      registry.rebind("SayHello", server);
+      registry.rebind("Football", server);
     } catch (RemoteException e) {      
       e.printStackTrace();
     }
